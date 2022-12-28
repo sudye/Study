@@ -104,27 +104,31 @@ public class TodayTicketController {
 		
 		ScreservDto dto= new ScreservDto();
 		
+		//날짜와 좌석을 기반으로 정보를 모두 가져옴
 		ArrayList<ScreservDto> reservInfo = dao.searchReservation(seatNo, selectedDate);
 		
 		String reservTimes= dto.getSelectedTime();
 		
-//		String[] DBselectedTimes = reservTimes.toArray(new String[reservTimes.size()]);
-//		int n,f,x;
-//		String[] DBselectedTimes = new String[Object.keys(reservTimes).length];
-//		for(x=0;x<Object.keys(reservTimes).length;x++) {
-//		
-//		
-//		}
-////		String [] DBselectedTimes = {"0","3","6"};
-//		 int[] IntDBselectedTimes = new int[DBselectedTimes.length];
-//	        for (n = 0; n < DBselectedTimes.length; n++) {
-//	        	IntDBselectedTimes[n] = Integer.parseInt(DBselectedTimes[n]);
-//	        }
-//		String [] OccupiedTimes = {"0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"};
-//		for(f=0;f<IntDBselectedTimes.length;f++) {
-//			OccupiedTimes[IntDBselectedTimes[f]]= "1";
-//		}
-//		
+		//받아온 dto를 배열로 변환
+		String[] DBselectedTimes = reservTimes.toArray(new String[reservTimes.size()]);
+		int n,f,x;
+		String[] DBselectedTimes = new String[Object.keys(reservTimes).length];
+		for(x=0;x<Object.keys(reservTimes).length;x++) {
+		
+		
+		}
+		//인트배열로 변환
+//		String [] DBselectedTimes = {"0","3","6"};
+		 int[] IntDBselectedTimes = new int[DBselectedTimes.length];
+	        for (n = 0; n < DBselectedTimes.length; n++) {
+	        	IntDBselectedTimes[n] = Integer.parseInt(DBselectedTimes[n]);
+	        }
+		//받아온 값에 해당하는 인덱스만 1로 바꿈
+		String [] OccupiedTimes = {"0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"};
+		for(f=0;f<IntDBselectedTimes.length;f++) {
+			OccupiedTimes[IntDBselectedTimes[f]]= "1";
+		}
+		
 	
 			
 		model.addAttribute("userId", userId);
