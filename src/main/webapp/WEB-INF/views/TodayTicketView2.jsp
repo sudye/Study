@@ -109,7 +109,10 @@
 														<label><input type="checkbox" name="selectedTime" value="0"></label>			
 														
 									</tr>
+										
 									<c:forEach begin="9" end="23" step="1" var="l" >
+												<c:choose>
+													<c:when test="${opTimes[l-8]==0}">
 												<tr>
 													<td class="skillbox" >${l}:00 ~ ${l+1}:00</td>
 													<td class="skillbox" > 예약 가능</td>
@@ -117,6 +120,13 @@
 													<label><input type="checkbox" name="selectedTime" value="${l-8}"></label>		 					 				
 													</td>
 												</tr>
+												</c:when>
+												<c:otherwise>
+														<td class="skillbox" >이미 예약됨</td>
+														<td class="skillbox" >
+										
+													</c:otherwise>
+											</c:choose>
 										</c:forEach>
 							
 							

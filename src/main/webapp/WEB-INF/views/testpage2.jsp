@@ -53,7 +53,7 @@
 													</td>
 												</tr>
 									</c:forEach>
-							<%-- 		<c:choose>
+							 			<c:choose>
 													<c:when test="${test[s]==0}"> 
      													<td class="skillbox" >예약 가능</td>
 														<td class="skillbox" >
@@ -65,6 +65,6 @@
 										
 													</c:otherwise>
 													
-										</c:choose>	 --%>
+										</c:choose>	 
 </body>
 </html>

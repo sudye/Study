@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -105,36 +106,34 @@ public class TodayTicketController {
 		ScreservDto dto= new ScreservDto();
 		
 		//날짜와 좌석을 기반으로 정보를 모두 가져옴
-		ArrayList<ScreservDto> reservInfo = dao.searchReservation(seatNo, selectedDate);
+		List<ScreservDto> reservInfo = dao.searchReservation(seatNo, selectedDate);
 		
-		String reservTimes= dto.getSelectedTime();
+		//받아온 db정보들을 String 리스트에 저장
+		List<String> intselectedTime = new ArrayList<String>();
+		for(int i=0;i<reservInfo.size();i++) {
+			String times = reservInfo.get(i).getSelectedTime();//reservinfo에서 원하는 정보인 selectedTime만 저장
+			intselectedTime.add(times); //새 String 리스트에 하나씩 저장
+		}
 		
-		//받아온 dto를 배열로 변환
-		String[] DBselectedTimes = reservTimes.toArray(new String[reservTimes.size()]);
+	
+		//인트 리스트로 변환
 		int n,f,x;
-		String[] DBselectedTimes = new String[Object.keys(reservTimes).length];
-		for(x=0;x<Object.keys(reservTimes).length;x++) {
-		
-		
-		}
-		//인트배열로 변환
-//		String [] DBselectedTimes = {"0","3","6"};
-		 int[] IntDBselectedTimes = new int[DBselectedTimes.length];
-	        for (n = 0; n < DBselectedTimes.length; n++) {
-	        	IntDBselectedTimes[n] = Integer.parseInt(DBselectedTimes[n]);
+		 List<Integer> IntDBselectedTimes = new ArrayList<Integer>();
+	        for (n = 0; n < intselectedTime.size(); n++) {
+	        	IntDBselectedTimes.add(Integer.parseInt(intselectedTime.get(n)));
 	        }
+	        
 		//받아온 값에 해당하는 인덱스만 1로 바꿈
-		String [] OccupiedTimes = {"0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"};
-		for(f=0;f<IntDBselectedTimes.length;f++) {
-			OccupiedTimes[IntDBselectedTimes[f]]= "1";
+		List<String> OccupiedTimes = Arrays.asList("0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0");
+		for(f=0;f<IntDBselectedTimes.size();f++) {
+			OccupiedTimes.add(IntDBselectedTimes.get(f), "1");
 		}
-		
 	
 			
 		model.addAttribute("userId", userId);
 		model.addAttribute("selectedDate", selectedDate);
 		model.addAttribute("seatNo", seatNo);
-//		model.addAttribute("opTimes", OccupiedTimes);
+		model.addAttribute("opTimes", OccupiedTimes);
 		
 		return "TodayTicketView2";
 	}
