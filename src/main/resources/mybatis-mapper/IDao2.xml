@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="com.studycafe.prac.dao.MemberDao">
+	
+	<!-- 회원 관리 SQL -->
+	<insert id="joinMember">
+		INSERT INTO scmemberTBL(userId, userPw, userName, userPhone, userEmail, userPoint)
+		VALUES(#{param1}, #{param2}, #{param3}, #{param4},#{param5},#{param6,  jdbcType=VARCHAR })
+	</insert>
+	
+	<select id="checkUserId" resultType="int">
+		SELECT COUNT(*) FROM scmemberTBL WHERE userId=#{param1}
+	</select>
+	
+	<select id="checkUserIdAndPw" resultType="int">
+		SELECT COUNT(*) FROM scmemberTBL WHERE userId=#{param1} and userPw=#{param2}
+	</select>
+	
+	<select id="getMemberInfo" resultType="com.studycafe.prac.dto.memberDto">
+		SELECT * FROM scmemberTBL WHERE userId=#{param1}
+	</select>
+	
+	<update id="memberModify">
+		UPDATE scmemberTBL SET userPw=#{param2}, userName=#{param3}, userPhone=#{param4}, userEmail=#{param5}, userPoint=#{param6} WHERE userId=#{param1}
+	</update>
+	
+	
+</mapper>
