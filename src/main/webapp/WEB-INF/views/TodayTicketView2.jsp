@@ -14,6 +14,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/title.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/seatTable.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/content.css">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    
@@ -43,7 +44,7 @@
 %>
 	<center>
 	<form action="registToday">
-	<table width="65%" border="0" cellspacing="0" cellpadding="20">
+	<table width="50%" border="0" cellspacing="0" cellpadding="20">
 		<input type="hidden" name = "userId" value="<%= sessionId %>">
 		<input type="hidden" name = "selectedDate" value="<%=selectedDate%>">
 		<input type="hidden" name = "seatNo" value="<%=seatNo%>">
@@ -87,69 +88,45 @@
 								</span>
 							</td>
 							</tr>
-		<tr>
+		<tr class="seatTblTr">
 			<td>
 				<center>
-					<div class="row">
-						<table id="example-table-1"  width="80%" border="1" cellspacing="1" cellpadding="10"
-						>
-							<thead>
-									<tr>
-										<th>시간</th>
-										<th>${seatNo}번 좌석현황</th>
-										<th>시간지정</th>
+					<div>
+						<table class="innerTable" width="60%" border="1" cellspacing="1" cellpadding="10">
+							<thead class="seatTblThead">
+									<tr class="seatTblTr">
+										<th class="seatTblTh">시간</th>
+										<th class="seatTblTh">${seatNo}번 좌석현황</th>
+										<th class="seatTblTh">시간지정</th>
 									
 									</tr>
 							</thead>
-							<tbody>
-									<tr>
-										<td class="skillbox" >8:00 ~ 9:00</td>
-     													<td class="skillbox" >예약 가능</td>
-														<td class="skillbox" >
-														<label><input type="checkbox" name="selectedTime" value="0"></label>			
-														
-									</tr>
-										
-									<c:forEach begin="9" end="23" step="1" var="l" >
+							<tbody class="seatTblBody">									
+									<c:forEach begin="8" end="23" step="1" var="l" >
 												<c:choose>
 													<c:when test="${opTimes[l-8]==0}">
-												<tr>
-													<td class="skillbox" >${l}:00 ~ ${l+1}:00</td>
-													<td class="skillbox" > 예약 가능</td>
-													<td class="skillbox" >
-													<label><input type="checkbox" name="selectedTime" value="${l-8}"></label>		 					 				
-													</td>
-												</tr>
-												</c:when>
-												<c:otherwise>
-														<td class="skillbox" >이미 예약됨</td>
-														<td class="skillbox" >
-										
-													</c:otherwise>
-											</c:choose>
-										</c:forEach>
-							
-							
-									
+											 <tr class="seatTblTr">
+												<td class="seatTblTd">${l}:00 ~ ${l+1}:00</td>
+												<td class="seatTblTd"> 예약 가능</td>
+												<td class="seatTblTd">
+												<label><input type="checkbox" name="selectedTime" value="${l-8}"></label>		 					 				
+												</td>
+											 </tr>
+											 </c:when>
+											 <c:otherwise>
+											 <tr class="seatTblTr">
+												<td class="seatTblTd">${l}:00 ~ ${l+1}:00</td>
+												<td class="seatTblTd">이미 예약됨</td>							
+											</tr class="seatTblTr">
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
 							</tbody>
-				</table>
+					</table>
 						
-							<%-- <tr>
-								<td class="titlebox">
-									<span class="title02">시작시간 지정:
-										<select name="selectTime2" >
-   						 				<option value="none" name="startTIME">=== 선택 ===</option>
-   						 					<c:forEach begin="8" end="23" step="1" var="t">
-    					 						<option name="selectTime1" value="a${t}">${t}:00 ~ ${t+1}:00</option>
-    									 	</c:forEach>
- 					 				</select>
-										
-									</span>
-									</td>
-							</tr> --%>
+						
 							<tr>
 										<td colspan="3">
-											
 											<input class="button_type01" type="submit" value="예약하기">
 											<input class="button_type01" type="button" value="뒤로" onclick="window.history.back() ">
 										</td>

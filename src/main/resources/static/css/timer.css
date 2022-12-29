@@ -1,0 +1,74 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+}
+
+ul{
+	margin: 0;
+	padding: 0;
+}
+.spacer{
+    height: 1000px;
+}
+/* 타이머 */
+.timerwrap{
+    position: relative;
+    background: inherit;
+    left: 80%;
+    top: 40%;
+    margin: -535px 0 0 -310px;
+    width: 300px;
+    height: 360px;
+    border-radius: 30px;
+    overflow: hidden;
+}
+.timerwrap:before{
+    content: "";
+    position: absolute;
+    background: inherit;
+    width: 870px;
+    height: 520px;
+    top: -25px;
+    left: -25px;
+    box-shadow: inset 0 0 0 1000px rgba(255,255,255,0.5);
+    filter: blur(15px);
+}
+
+#timer {
+    list-style: none;
+    width: 100%;
+	margin: 0;
+	padding: 50px;
+	display: block;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+#timer li {
+	display: inline-block;
+}
+#timer li span {
+	font-size: 30px;
+	font-weight: bold;
+	line-height: 80px;
+	color: #3a3a3a;
+	font-family: Arial;
+	
+}
+#timer li.seperator {
+	font-size: 80px;
+	line-height: 70px;
+	vertical-align: top;
+	margin: 0 10px;
+}
+#timer li p {
+	font-size: 25px;
+	color: #666666;
+	font-family: Arial;
+	
+}

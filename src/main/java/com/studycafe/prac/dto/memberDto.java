@@ -15,6 +15,6 @@ public class memberDto {
 	private String userPhone;
 	private String userEmail;
 	private String userPoint;
-	
+	private String usingTicket;
 
 }

@@ -18,8 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.studycafe.prac.dao.MemberDao;
 import com.studycafe.prac.dao.TodayTicketDao;
 import com.studycafe.prac.dto.ScreservDto;
+import com.studycafe.prac.dto.memberDto;
 import com.studycafe.prac.dto.seatDto;
 
 
@@ -75,7 +77,13 @@ public class TodayTicketController {
 	
 	@RequestMapping(value="/TodayTicketView")
 	public String TodayTicketView(HttpServletResponse response,HttpSession session) {
+		
 		String sessionId = (String) session.getAttribute("userId");
+		MemberDao dao2 = sqlSession.getMapper(MemberDao.class);
+		
+		memberDto userP = dao2.getMemberInfo(sessionId);
+		String usingTicket = userP.getUsingTicket();
+		int uTicket = Integer.parseInt(usingTicket);
 		
 		if(sessionId==null) {
 		try {
@@ -88,9 +96,20 @@ public class TodayTicketController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} return "ChooseTicket";
+		}else if(uTicket>=1){
+			try {
+			response.setContentType("text/html; charset=UTF-8");      
+	        PrintWriter out;
+			out = response.getWriter();
+			out.println("<script>alert('중복 예약은 불가능합니다.'); history.go(-1);</script>");
+		    out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			return "ChooseTicket";
 		}else {
-		
-		return "TodayTicketView";
+			return "TodayTicketView";
 		}
 	}
 	
@@ -123,16 +142,20 @@ public class TodayTicketController {
 	        	IntDBselectedTimes.add(Integer.parseInt(intselectedTime.get(n)));
 	        }
 	        
-		//받아온 값에 해당하는 인덱스만 1로 바꿈
-		List<String> OccupiedTimes = Arrays.asList("0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0");
-		for(f=0;f<IntDBselectedTimes.size();f++) {
-			OccupiedTimes.add(IntDBselectedTimes.get(f), "1");
-		}
+	    List<String> OccupiedTimes = new ArrayList<String>();
+	    for(f = 1; f<=17;f++) {
+	    	if(IntDBselectedTimes.contains(f)) {
+	    		OccupiedTimes.add("1");
+	    	}else {
+	    		OccupiedTimes.add("0");
+	    	}
+	    }
+	    
 	
-			
+		String strSeatNo = String.valueOf(seatNo);	
 		model.addAttribute("userId", userId);
 		model.addAttribute("selectedDate", selectedDate);
-		model.addAttribute("seatNo", seatNo);
+		model.addAttribute("seatNo", strSeatNo);
 		model.addAttribute("opTimes", OccupiedTimes);
 		
 		return "TodayTicketView2";
@@ -153,7 +176,7 @@ public class TodayTicketController {
 		
 		TodayTicketDao dao = sqlSession.getMapper(TodayTicketDao.class);
 		
-		int seatNo = Integer.parseInt(request.getParameter("seatNo").toString());
+		String seatNo = request.getParameter("seatNo");
 		String userId = request.getParameter("userId");
 		String ticketName = request.getParameter("ticketName");
 		String selectedDate = request.getParameter("selectedDate");
@@ -167,31 +190,26 @@ public class TodayTicketController {
 		String number=selectedTime[i];
 		selectedTimes[i]=number;
 		}
-		int intticketName= Integer.parseInt(ticketName);//ticketname을 int로 변환
+		
+		int intticketName= Integer.parseInt(ticketName);//ticketname을 int로 변환 체크박스 갯수를 알아내기위해
 			
-			if(intticketName==selectedTime.length) {//체크박스의 갯수와 ticketname의 숫자를 비교해서 일치하지 않으면 뒤로돌려보냄
-				dao.regist(seatNo, userId, ticketName, selectedDate);
-					for(int n=1;n<=selectedTime.length;n++) {//ST[i]배열의 값을 각각 체크박스 갯수만큼 데이타베이스(선택시간)에 넣음 
-						dao.makeReservation(seatNo, userId, selectedDate, selectedTimes[n-1]);
-					}
-					
+		if(intticketName==selectedTime.length) {//체크박스의 갯수와 ticketname의 숫자를 비교해서 일치하지 않으면 뒤로돌려보냄
+				
 				//-----------------방금 들어간 회원정보들을 결제 전 체크페이지에 전달	---------------------------
-				ArrayList<seatDto> seatDto= dao.registTodayConfirm();
-				
-				seatDto fseatDto = seatDto.get(0);
-				
+//				ArrayList<seatDto> seatDto= dao.registTodayConfirm();
+//				
+//				seatDto fseatDto = seatDto.get(0);
+//				
+				int t;
 				String[] TodayPrice = {"2,000","3,000","5,000","6,000","7,000"};
 				String[] TodayTime = {"1","2","4","6","8"};
-				for(int t=0;t<5;t++) {
+				for(t=0;t<5;t++) {
 					if(TodayTime[t].equals(ticketName)) {
 						
 						model.addAttribute("PayingPoint",TodayPrice[t]);//지불할 포인트 계산
 					}
 				}
-				
-				
-			
-				
+				//-------시작시간 종료시간 뽑아내기---------
 				int[] Times= new int[17];//8부터 24까지 문자배열생성
 				for(int j=0;j<16;j++) {
 				Times[j]=j+8;	
@@ -211,7 +229,10 @@ public class TodayTicketController {
 				  
 				  model.addAttribute("startTime",startTime);
 				  model.addAttribute("endTime",endTime);
-				  model.addAttribute("fseatDto", fseatDto);
+				  model.addAttribute("selectedDate",selectedDate);
+				  model.addAttribute("seatNo",seatNo );
+				  model.addAttribute("ticketName",ticketName);
+				  model.addAttribute("selectedTime",selectedTime);
 				  
 				//-----------------방금 들어간 회원정보들을 결제 전 체크페이지에 전달 끝	---------------------------
 				return "registTodayConfirm";
@@ -243,6 +264,79 @@ public class TodayTicketController {
 		
 		
 		return "registTodayConfirm";
+	}
+	@RequestMapping(value="/todayPay")
+	public String todayPay(HttpServletRequest request,HttpServletResponse response,Model model
+			,HttpSession session) {
+
+		TodayTicketDao dao = sqlSession.getMapper(TodayTicketDao.class);
+		MemberDao dao2 = sqlSession.getMapper(MemberDao.class);
+		String sessionId = (String) session.getAttribute("userId");
+		memberDto dto=new memberDto();
+		seatDto seatdto=new seatDto();
+		
+		
+		
+		int seatNo = Integer.parseInt(request.getParameter("seatNo").toString());
+		String userId = request.getParameter("userId");
+		String ticketName = request.getParameter("ticketName");
+		String selectedDate = request.getParameter("selectedDate");
+		String [] selectedTime = request.getParameterValues("selectedTime");
+		String PayingPoint = request.getParameter("PayingPoint");
+		
+				//넘어온 체크박스값 정렬 후, 첫번째 값부터 마지막값까지 추출후 새 배열에 넣음
+				Arrays.sort(selectedTime);
+				int i;
+				String [] selectedTimes= new String[selectedTime.length];
+				for(i=0;i<selectedTime.length;i++) {	
+				String number=selectedTime[i];
+				selectedTimes[i]=number;
+				}
+				
+				//userpoint를 받아옴
+				memberDto userP = dao2.getMemberInfo(userId);
+				String UserP = userP.getUserPoint();
+				
+				int intUserP= Integer.parseInt(UserP);
+				
+				String newPayingPoint = PayingPoint.replaceAll(",", "");
+				int intPayingPoint=Integer.parseInt(newPayingPoint);
+				
+				if (intUserP>=intPayingPoint) { //보유한 포인트가 지불할 포인트보다 많을 경우만 통과
+				int intUserP2=intUserP-intPayingPoint;
+				String UserP2=String.valueOf(intUserP2);
+				
+				
+				dao2.updateUticketPoint(userId, UserP2, ticketName);
+				dao.regist(seatNo, userId, ticketName, selectedDate);//정보들을 scseatTbl에 먼저저장
+					for(int n=1;n<=selectedTime.length;n++) {//ST[i]배열의 값을 각각 체크박스 갯수만큼 데이타베이스(선택시간)에 넣음 
+						dao.makeReservation(seatNo, userId, selectedDate, selectedTimes[n-1]);//예약테이블에 체크박스 횟수만큼 저장
+						}
+					return "todayPayOk";
+				
+				}
+				else {
+					try {
+						response.setContentType("text/html; charset=UTF-8");      
+				        PrintWriter out;
+						out = response.getWriter();
+						out.println("<script>alert('이용시간과 선택한 지정시간이 일치하지 않습니다.'); history.go(-1);</script>");
+					    out.flush();
+						} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						}
+						return "registTodayConfirm";
+					}	
+				}
+	@RequestMapping(value="/todayPayOk")
+	public String todayPayOk() {
+			
+	
+			
+			
+		
+		return "todayPayOk";
 	}
 	
 }

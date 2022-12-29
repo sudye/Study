@@ -21,11 +21,15 @@ import com.studycafe.prac.dto.seatDto;
 
 
 @Controller
-public class HomeController {
+public class MemberController {
 	
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@RequestMapping(value = "testpage3")
+	public String testpage3() {
+		return "testpage3";
+	}
 	@RequestMapping(value = "/")
 	public String home() {
 		return "redirect:index";
@@ -94,10 +98,11 @@ public class HomeController {
 		String uPhone = request.getParameter("userPhone");
 		String uEmail = request.getParameter("userEmail");
 		String uPoint = request.getParameter("userPoint");
+		String uTicket = request.getParameter("usingTicket");
 		
 		MemberDao dao = sqlSession.getMapper(MemberDao.class);
 		
-		int joinFlag = dao.joinMember(uId, uPw, uName, uPhone ,uEmail, uPoint);
+		int joinFlag = dao.joinMember(uId, uPw, uName, uPhone ,uEmail, uPoint,uTicket);
 		
 		if(joinFlag == 1) {//회원가입 성공시 바로 로그인 진행
 			session.setAttribute("memberId", uId);
@@ -110,6 +115,22 @@ public class HomeController {
 		} else { //회원가입 실패
 			return "JoinFail";
 		}	
+		
+	} 
+	
+
+	@RequestMapping(value = "/memberInfo")
+	public String memberInfo(HttpServletRequest request, HttpSession session, Model model) {
+		
+		String sessionId = (String) session.getAttribute("userId");
+		
+		MemberDao dao = sqlSession.getMapper(MemberDao.class);
+		
+		memberDto memberDto = dao.getMemberInfo(sessionId);
+		
+		model.addAttribute("memberDto", memberDto);
+		
+		return "memberInfo";
 		
 	} 
 	
@@ -128,7 +149,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/memberModifyOk")
-	public String memberModifyOk(HttpServletRequest request, Model model) {
+	public String memberModifyOk(HttpServletRequest request, Model model, HttpSession session) {
 		
 		String userId = request.getParameter("userId");
 		String userPw = request.getParameter("userPw");
@@ -137,11 +158,13 @@ public class HomeController {
 		String userEmail = request.getParameter("userEmail");
 		String userPoint = request.getParameter("userPoint");
 		
+		String sessionId = (String) session.getAttribute("userId");
+		
 		MemberDao dao = sqlSession.getMapper(MemberDao.class);
 		
 		dao.memberModify(userId, userPw, userName, userPhone, userEmail, userPoint);
 		
-		memberDto memberDto = dao.getMemberInfo(userId);//수정된 회원정보 다시 가져오기
+		memberDto memberDto = dao.getMemberInfo(sessionId);
 		
 		model.addAttribute("memberDto", memberDto);
 		
@@ -150,9 +173,41 @@ public class HomeController {
 	
 	
 	
+	@RequestMapping(value = "/memberDelete")
+	public String memberDelete(Model model,HttpSession session) {
+		
+		String sessionId = (String) session.getAttribute("userId");
+		String sessionPw = (String) session.getAttribute("userPw");
+		
+		MemberDao dao = sqlSession.getMapper(MemberDao.class);
+		
+		memberDto memberDto = dao.getMemberInfo(sessionId);
+		
+		model.addAttribute("memberDto", memberDto);
+		
+		return "memberDelete";
+	}
+	
+	@RequestMapping(value = "/memberDeleteOk")
+	public String memberDeleteOk(HttpServletRequest request, HttpSession session) {
+		
+		String userId = request.getParameter("userId");
+		String userPw = request.getParameter("userPw");
+		
+		MemberDao dao = sqlSession.getMapper(MemberDao.class);
+		
+		
+		
+	
+		
+		return "memberDeleteOk";
+	}
+	
+	
 
 	
 	
 	
 	
 }
+

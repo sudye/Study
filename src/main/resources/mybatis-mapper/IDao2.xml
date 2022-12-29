@@ -8,8 +8,8 @@
 	
 	<!-- 회원 관리 SQL -->
 	<insert id="joinMember">
-		INSERT INTO scmemberTBL(userId, userPw, userName, userPhone, userEmail, userPoint)
-		VALUES(#{param1}, #{param2}, #{param3}, #{param4},#{param5},#{param6,  jdbcType=VARCHAR })
+		INSERT INTO scmemberTBL(userId, userPw, userName, userPhone, userEmail, userPoint,usingTicket)
+		VALUES(#{param1}, #{param2}, #{param3}, #{param4},#{param5},#{param6,  jdbcType=VARCHAR },#{param7})
 	</insert>
 	
 	<select id="checkUserId" resultType="int">
@@ -28,5 +28,8 @@
 		UPDATE scmemberTBL SET userPw=#{param2}, userName=#{param3}, userPhone=#{param4}, userEmail=#{param5}, userPoint=#{param6} WHERE userId=#{param1}
 	</update>
 	
+	<update id="updateUticketPoint">
+		UPDATE scmemberTBL SET userPoint=#{param2}, usingTicket=#{param3} WHERE userId=#{param1}
+	</update>
 	
 </mapper>

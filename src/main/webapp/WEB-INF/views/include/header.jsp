@@ -21,7 +21,19 @@
 			<% 
 				if(sessionId == null) { 
 			%>
-        		<a href="memberLogin">로그인</a>
+        		&nbsp;
+        	<% 
+        		} else if(sessionId.equals("admin")){ 
+        	%>
+        		<td><a href="memberLogin">관리자페이지</a></td>
+        	<% 
+        		} 
+        	%>
+			
+			<% 
+				if(sessionId == null) { 
+			%>
+        		<td><a href="memberLogin">로그인</a>
         	<% 
         		} else { 
         	%>

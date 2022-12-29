@@ -3,13 +3,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/title.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/content.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/login.css">
-<meta charset="UTF-8">
-<title>회원가입 페이지</title>
+<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/join.js"></script>
+<title>내 정보</title>
 </head>
 <body>
 <%@ include file="include/header.jsp" %>
@@ -27,12 +28,11 @@
 				<table width="90%" border="0" cellspacing="0" cellpadding="10">
 					<tr class="contentbox">
 						<td class="content">
-							<center>
-							<form action="JoinOk">						
+							<center>						
 							<table border="0" cellspacing="0" cellpadding="10">
 									<tr>
 										<td colspan="2" align="center" class="content_text01">
-										회원가입
+										내 정보 
 										</td>
 									</tr>
 									<tr>
@@ -41,54 +41,34 @@
 										</td>
 									</tr>
 									<tr>
-										<td>
-										  <div class="input-box">
-										  <input id="username" type="text" name="userId" placeholder="아이디">
-										  <label for="userId">아이디</label>
-										  </div>
-										</td>
+										<td><span class="content_text01">아 이 디 : </span></td>
+										<td>${memberDto.userId }</td>
+									
+							
+									<tr>
+										<td><span class="content_text01">이&nbsp;&nbsp;&nbsp;&nbsp;름 : </span></td>
+										<td>${memberDto.userName }</td>
 									</tr>
 									<tr>
-										<td>
-										  <div class="input-box">
-										  <input id="password" type="password" name="userPw" placeholder="비밀번호">
-										  <label for="userPw">비밀번호</label>
-										  </div>
-										</td>
+										<td><span class="content_text01">전화번호 : </span></td>
+										<td>${memberDto.userPhone }</td>
+									</tr>
+									<tr>
+										<td><span class="content_text01">이 메 일 : </span></td>
+										<td>${memberDto.userEmail }</td>
 									</tr>
 									
 									<tr>
-										<td>
-										  <div class="input-box">
-										  <input id="Name" type="text" name="userName" placeholder="이름">
-										  <label for="userName">이름</label>
-										  </div>
-										</td>
+										<td><span class="content_text01">잔여포인트 : </span></td>
+										<td>${memberDto.userPoint }</td>
 									</tr>
+									
 									<tr>
-										<td>
-										  <div class="input-box">
-										  <input id="phone" type="text" name="userPhone" placeholder="전화번호">
-										  <label for="userPhone">전화번호</label>
-										  </div>
+										<td colspan="2">
+											<input class="button_type01" type="button" value="정보 수정" onclick="script:window.location='memberModify'">
 										</td>
 									</tr>
-									<tr>
-										<td>
-										  <div class="input-box">
-										  <input id="email" type="text" name="userEmail" placeholder="이메일">
-										  <label for="userEmail">이메일</label>
-										  </div>
-										</td>
-									</tr>
-									<input type="hidden" name = "userPoint" value="200000">
-									<input type="hidden" name = "usingTicket" value="none">
-									<tr>
-										<td colspan="">
-											<button type="submit" class="btn btn-primary btn-lg">회원가입</button>
-										</td>
-	
-									</tr>
+							
 		
 		</table>
 		</form>
@@ -101,6 +81,7 @@
 		</tr>
 		</table>
 		</center>
+		
 		
 	
 <%@ include file="include/footer.jsp" %>
