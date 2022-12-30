@@ -25,11 +25,14 @@
 			<td>
 				<center>
 				<table width="90%" border="0" cellspacing="0" cellpadding="10">
+					
 					<tr class="contentbox">
+						
 						<td class="content">
 							<center>
 							<form action="JoinOk">						
 							<table border="0" cellspacing="0" cellpadding="10">
+								
 									<tr>
 										<td colspan="2" align="center" class="content_text01">
 										회원가입
@@ -89,12 +92,13 @@
 										</td>
 	
 									</tr>
-		
+				
 		</table>
 		</form>
 		</center>
 		</td>
 		</tr>
+		
 		</table>
 		</center>
 		</td>

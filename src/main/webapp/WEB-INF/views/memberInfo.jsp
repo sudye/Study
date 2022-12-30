@@ -30,6 +30,7 @@
 						<td class="content">
 							<center>						
 							<table border="0" cellspacing="0" cellpadding="10">
+							<tbody class= "wrap">
 									<tr>
 										<td colspan="2" align="center" class="content_text01">
 										내 정보 
@@ -69,7 +70,7 @@
 										</td>
 									</tr>
 							
-		
+		</tbody>
 		</table>
 		</form>
 		</center>
