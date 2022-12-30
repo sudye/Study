@@ -28,6 +28,8 @@
 		UPDATE scmemberTBL SET userPw=#{param2}, userName=#{param3}, userPhone=#{param4}, userEmail=#{param5}, userPoint=#{param6} WHERE userId=#{param1}
 	</update>
 	
+	<!-- 이용권 관련 -->
+	
 	<update id="updateUticketPoint">
 		UPDATE scmemberTBL SET userPoint=#{param2}, usingTicket=#{param3} WHERE userId=#{param1}
 	</update>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.studycafe.prac.dao.BoardDao">
+
+	<!-- 게시판 SQL -->
+	
+	<insert id="writeQuestion">
+		INSERT INTO scboardtbl(bnum ,btitle, bcontent, buserid) VALUES(scboard_seq.nextval, #{param1}, #{param2}, #{param3}) 
+	</insert>
+	
+	<select id="questionList" resultType="com.studycafe.prac.dto.BoardDto">
+		SELECT * FROM
+			(SELECT A.*,Floor((ROWNUM-1)/#{amount}+1)PAGE,ROWNUM
+			FROM
+			(SELECT * FROM scboardtbl ORDER BY bnum DESC)A) 
+		WHERE PAGE= #{pageNum}
+	</select>
+	
+	<select id="questionView" resultType="com.studycafe.prac.dto.BoardDto">
+		SELECT * FROM scboardtbl WHERE bnum=#{param1}
+	</select>	
+	
+	<update id="questionModify">
+		UPDATE scboardtbl SET btitle=#{param2}, bcontent=#{param3}, buserid=#{param4} WHERE bnum=#{param1}
+	</update>
+	
+	<delete id="questionDelete">
+		DELETE FROM scboardtbl WHERE bnum=#{param1}
+	</delete>
+	
+	<select id="boardAllCount" resultType="int">
+		SELECT COUNT(*) FROM scboardtbl
+	</select>
+	
+</mapper>
